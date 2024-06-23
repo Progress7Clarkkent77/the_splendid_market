@@ -1,0 +1,39 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "the-splendid-market",
+          "appId": "1:248321400997:android:6807a1028acc86dd6bad4c",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "the-splendid-market",
+          "configurations": {
+            "android": "1:248321400997:android:6807a1028acc86dd6bad4c",
+            "ios": "1:248321400997:ios:e4d89ab1f841e3bc6bad4c",
+            "macos": "1:248321400997:ios:e4d89ab1f841e3bc6bad4c",
+            "web": "1:248321400997:web:b2e9f68a934b43f96bad4c",
+            "windows": "1:248321400997:web:293fcd2e4d2077826bad4c"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
