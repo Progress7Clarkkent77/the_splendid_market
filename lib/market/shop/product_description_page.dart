@@ -56,6 +56,7 @@ class ProductDescriptionPage extends StatelessWidget {
                     child: Image.network(
                       product.image ?? '',
                       fit: BoxFit.contain,
+                      //Image.asset('assets/images/The Splendid.png', fit: BoxFit.cover),
                       width: double.infinity,
                       height: 200,
                     ),

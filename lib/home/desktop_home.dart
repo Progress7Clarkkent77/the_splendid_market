@@ -104,7 +104,7 @@ class DesktopHome extends StatelessWidget {
                                     MediaQuery.of(context).size.height * 0.02),
                             ElevatedButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/vendor');
+                                //Navigator.pushNamed(context, '/vendor');
                               },
                               child: const Text(
                                 'Explore',

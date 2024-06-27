@@ -41,6 +41,20 @@ class ClientLogin extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
+              TextField(
+                controller: ctrl.loginPasswordCtrl,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: const Icon(Icons.key),
+                  labelText: 'Password',
+                  hintText: 'Enter your Password',
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   ctrl.loginWithPhone();

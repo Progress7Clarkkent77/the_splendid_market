@@ -85,6 +85,7 @@ class Shop extends StatelessWidget {
                     return ProductCard(
                       name: ctrl.productShowInUi[index].name ?? 'No name',
                       imageUrl: ctrl.productShowInUi[index].image ?? '',
+                      //Image.asset('assets/images/The Splendid.png', fit: BoxFit.cover),
                       price: ctrl.productShowInUi[index].price ?? 00,
                       offerTag: '20 % off',
                       onTap: () {

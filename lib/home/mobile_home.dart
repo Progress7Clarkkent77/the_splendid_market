@@ -51,7 +51,7 @@ class MobileHome extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/vendor');
+                        Navigator.pushNamed(context, '/addproduct');
                       },
                       child: const Text(
                         'Explore',

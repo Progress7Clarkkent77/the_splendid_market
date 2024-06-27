@@ -22,6 +22,9 @@ class Product {
   @JsonKey(name: "price")
   double? price;
 
+  @JsonKey(name: "last price")
+  double? lastPrice;
+
   @JsonKey(name: "brand")
   String? brand;
 
@@ -36,6 +39,7 @@ class Product {
     this.image,
     this.offer,
     this.price,
+    this.lastPrice,
     this.brand,
   });
 

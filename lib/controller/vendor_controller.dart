@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:html'; // For web-specific file picking
@@ -11,8 +12,10 @@ class VendorController extends GetxController {
 
   TextEditingController productNameCtrl = TextEditingController();
   TextEditingController productDescriptionCtrl = TextEditingController();
-  TextEditingController productImgCtrl = TextEditingController();
   TextEditingController productPriceCtrl = TextEditingController();
+  TextEditingController productLastPriceCtrl = TextEditingController();
+
+  var productImgUrl = ''.obs;
 
   String category = 'general';
   String brand = 'un branded';
@@ -43,24 +46,31 @@ class VendorController extends GetxController {
   }
 
   void addProduct() {
+    // Check if any of the required fields are empty
+    if (productNameCtrl.text.isEmpty ||
+        productDescriptionCtrl.text.isEmpty ||
+        productPriceCtrl.text.isEmpty ||
+        productLastPriceCtrl.text.isEmpty ||
+        productImgUrl.value.isEmpty) {
+      Get.snackbar('Error', 'Please fill all the fields',
+          colorText: Colors.red);
+      return;
+    }
     try {
       DocumentReference doc = productCollection.doc();
       Product product = Product(
         id: doc.id,
         name: productNameCtrl.text,
-        category: category,
         description: productDescriptionCtrl.text,
         price: double.tryParse(productPriceCtrl.text),
-        brand: brand,
-        image: productImgCtrl.text,
-        offer: offer,
+        lastPrice: double.tryParse(productLastPriceCtrl.text),
+        image: productImgUrl.value,
       );
       final productJson = product.toJson();
       doc.set(productJson);
       Get.snackbar('Success', 'Product added successfully',
           colorText: Colors.green);
       setValueDefault();
-
       update();
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
@@ -93,8 +103,6 @@ class VendorController extends GetxController {
           .toList();
       products.clear();
       products.assignAll(retrievedProducts);
-      Get.snackbar('Success', 'Products fetched successfully',
-          colorText: Colors.green);
       update();
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
@@ -114,8 +122,9 @@ class VendorController extends GetxController {
   void setValueDefault() {
     productNameCtrl.clear();
     productPriceCtrl.clear();
+    productLastPriceCtrl.clear();
     productDescriptionCtrl.clear();
-    productImgCtrl.clear();
+    productImgUrl.value = '';
 
     category = 'general';
     brand = 'un branded';
