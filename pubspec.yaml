@@ -44,6 +44,13 @@ dependencies:
   otp_text_field_v2: ^1.0.3
   image_picker: ^1.1.2
   image_network: ^2.5.6
+  speech_to_text: ^6.6.2
+  avatar_glow: ^3.0.1
+  clipboard: ^0.1.3
+  http: ^1.2.1
+  flutter_swiper_view: ^1.1.8
+  font_awesome_flutter: ^10.7.0
+  flutter_staggered_grid_view: ^0.7.0
   
 
 
@@ -93,6 +100,17 @@ flutter:
      - assets/images/instagram.png
      - assets/images/facebook.png
      - assets/images/The Splendid.png
+     - assets/images/s10.png
+     - assets/images/s5.jpg
+     - assets/images/s6.png
+     - assets/images/s8.jpg
+     - assets/images/s9.jpg
+     - assets/images/s11.png
+     - assets/images/s12.jpeg
+     - assets/images/s13.jpg
+     - assets/images/s14.png
+     - assets/images/s15.jpeg
+     - assets/images/boy.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:html'; // For web-specific file picking
-import 'package:the_splendid_market/model/products/product.dart'; // Adjust the import according to your project structure
+import 'package:the_splendid_market/controller/login_controller.dart';
+import 'dart:html';
+import 'package:the_splendid_market/model/products/product.dart';
+import 'package:the_splendid_market/model/user/user.dart';
 
 class VendorController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -18,15 +19,21 @@ class VendorController extends GetxController {
   var productImgUrl = ''.obs;
 
   String category = 'general';
-  String brand = 'un branded';
+  String brand = 'unbranded';
   bool? offer = false;
 
   List<Product> products = [];
 
   @override
   Future<void> onInit() async {
-    productCollection = firestore.collection('products');
-    await fetchProducts();
+    User? loginUser = Get.find<LoginController>().loginUser;
+    if (loginUser != null) {
+      productCollection = firestore
+          .collection('users')
+          .doc(loginUser.id)
+          .collection('products');
+      await fetchProducts();
+    }
     super.onInit();
   }
 
@@ -45,8 +52,7 @@ class VendorController extends GetxController {
     }
   }
 
-  void addProduct() {
-    // Check if any of the required fields are empty
+  Future<void> addProduct() async {
     if (productNameCtrl.text.isEmpty ||
         productDescriptionCtrl.text.isEmpty ||
         productPriceCtrl.text.isEmpty ||
@@ -57,21 +63,26 @@ class VendorController extends GetxController {
       return;
     }
     try {
-      DocumentReference doc = productCollection.doc();
-      Product product = Product(
-        id: doc.id,
-        name: productNameCtrl.text,
-        description: productDescriptionCtrl.text,
-        price: double.tryParse(productPriceCtrl.text),
-        lastPrice: double.tryParse(productLastPriceCtrl.text),
-        image: productImgUrl.value,
-      );
-      final productJson = product.toJson();
-      doc.set(productJson);
-      Get.snackbar('Success', 'Product added successfully',
-          colorText: Colors.green);
-      setValueDefault();
-      update();
+      User? loginUser = Get.find<LoginController>().loginUser;
+      if (loginUser != null) {
+        DocumentReference doc = productCollection.doc();
+        Product product = Product(
+          id: doc.id,
+          name: productNameCtrl.text,
+          description: productDescriptionCtrl.text,
+          price: double.tryParse(productPriceCtrl.text),
+          lastPrice: double.tryParse(productLastPriceCtrl.text),
+          image: productImgUrl.value,
+        );
+        final productJson = product.toJson();
+        await doc.set(productJson);
+        Get.snackbar('Success', 'Product added successfully',
+            colorText: Colors.green);
+        setValueDefault();
+        update();
+      } else {
+        Get.snackbar('Error', 'User not logged in', colorText: Colors.red);
+      }
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
       print(e);
@@ -127,7 +138,7 @@ class VendorController extends GetxController {
     productImgUrl.value = '';
 
     category = 'general';
-    brand = 'un branded';
+    brand = 'unbranded';
     offer = false;
     update();
   }

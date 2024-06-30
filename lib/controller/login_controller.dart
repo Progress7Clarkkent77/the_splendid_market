@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:otp_text_field_v2/otp_field_v2.dart';
-
 import '../model/user/user.dart';
 
 class LoginController extends GetxController {
@@ -14,8 +13,7 @@ class LoginController extends GetxController {
 
   TextEditingController registerNameCtrl = TextEditingController();
   TextEditingController registerNumberCtrl = TextEditingController();
-  TextEditingController registerPasswordCtrl =
-      TextEditingController(); // Added for password
+  TextEditingController registerPasswordCtrl = TextEditingController();
   TextEditingController loginNumberCtrl = TextEditingController();
   TextEditingController loginPasswordCtrl = TextEditingController();
 
@@ -26,7 +24,6 @@ class LoginController extends GetxController {
 
   User? loginUser;
 
-  // Define OTP state within the LoginController
   var otp = 0.obs;
 
   void setOtp(int newOtp) {
@@ -52,7 +49,6 @@ class LoginController extends GetxController {
   Future<void> addUser() async {
     try {
       if (otpSend == otpEnter) {
-        // Check if the phone number already exists
         var querySnapshot = await userCollection
             .where('number', isEqualTo: int.parse(registerNumberCtrl.text))
             .limit(1)
@@ -69,18 +65,22 @@ class LoginController extends GetxController {
           id: doc.id,
           name: registerNameCtrl.text,
           number: int.parse(registerNumberCtrl.text),
-          password: registerPasswordCtrl.text, // Save password
+          password: registerPasswordCtrl.text,
         );
         final userJson = user.toJson();
         await doc.set(userJson);
+
+        // Create subcollections for products and orders
+        await doc.collection('products').add({});
+        await doc.collection('orders').add({});
+
         Get.snackbar('Success', 'Registration successful',
             colorText: Colors.green);
 
-        // Clear fields and reset OTP display
         update();
         registerNumberCtrl.clear();
         registerNameCtrl.clear();
-        registerPasswordCtrl.clear(); // Clear password field
+        registerPasswordCtrl.clear();
         otpController.clear();
         otpFieldShown = false;
         otp.value = 0;
@@ -100,17 +100,15 @@ class LoginController extends GetxController {
       if (registerNameCtrl.text.isEmpty ||
           registerNumberCtrl.text.isEmpty ||
           registerPasswordCtrl.text.isEmpty) {
-        // Check password field
         Get.snackbar('Error', 'Please fill all the fields',
             colorText: Colors.red);
         return;
       }
       final random = Random();
       int otp = 1000 + random.nextInt(9000);
-      //print(otp);
       otpFieldShown = true;
       otpSend = otp;
-      setOtp(otp); // Set the OTP in the state
+      setOtp(otp);
       Get.snackbar('Success', 'Otp Sent Successfully', colorText: Colors.green);
     } catch (e) {
       print(e);
@@ -122,11 +120,11 @@ class LoginController extends GetxController {
   Future<void> loginWithPhone() async {
     try {
       String phoneNumber = loginNumberCtrl.text;
-      String password = loginPasswordCtrl.text; // Get password input
+      String password = loginPasswordCtrl.text;
       if (phoneNumber.isNotEmpty && password.isNotEmpty) {
         var querySnapshot = await userCollection
             .where('number', isEqualTo: int.tryParse(phoneNumber))
-            .where('password', isEqualTo: password) // Check password
+            .where('password', isEqualTo: password)
             .limit(1)
             .get();
         if (querySnapshot.docs.isNotEmpty) {
@@ -134,7 +132,7 @@ class LoginController extends GetxController {
           var userData = userDoc.data() as Map<String, dynamic>;
           box.write('loginUser', userData);
           loginNumberCtrl.clear();
-          loginPasswordCtrl.clear(); // Clear password field
+          loginPasswordCtrl.clear();
           Get.toNamed('/shop');
           Get.snackbar('Success', 'Login Successful', colorText: Colors.green);
         } else {

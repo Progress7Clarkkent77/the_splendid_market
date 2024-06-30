@@ -15,20 +15,24 @@ class User {
   @JsonKey(name: "password")
   String? password;
 
-  User({this.id, this.name, this.number, this.password});
+  @JsonKey(name: "email") // Added field
+  String? email;
+
+  @JsonKey(name: "accountNumber") // Added field
+  String? accountNumber;
+
+  @JsonKey(name: "businessName") // Added field
+  String? businessName;
+
+  User(
+      {this.id,
+      this.name,
+      this.number,
+      this.password,
+      this.email,
+      this.accountNumber,
+      this.businessName});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
-
-// class ProductService {
-//   static Future<List<User>> getLatestProducts() async {
-//     FirebaseFirestore firestore = FirebaseFirestore.instance;
-//     CollectionReference productCollection = firestore.collection('user');
-
-//     QuerySnapshot productSnapshot = await productCollection.get();
-//     return productSnapshot.docs
-//         .map((doc) => User.fromJson(doc.data() as Map<String, dynamic>))
-//         .toList();
-//   }
-// }

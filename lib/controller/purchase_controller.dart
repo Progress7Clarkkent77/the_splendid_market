@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_splendid_market/controller/login_controller.dart';
@@ -17,7 +16,11 @@ class PurchaseController extends GetxController {
 
   @override
   void onInit() {
-    orderCollection = firestore.collection('orders');
+    User? loginUser = Get.find<LoginController>().loginUser;
+    if (loginUser != null) {
+      orderCollection =
+          firestore.collection('users').doc(loginUser.id).collection('orders');
+    }
     super.onInit();
   }
 
@@ -35,10 +38,10 @@ class PurchaseController extends GetxController {
   Future<void> orderSuccess({required String? transactionId}) async {
     User? loginUser = Get.find<LoginController>().loginUser;
     try {
-      if (transactionId != null) {
+      if (transactionId != null && loginUser != null) {
         DocumentReference docRef = await orderCollection.add({
-          'customer': loginUser?.name ?? '',
-          'phone': loginUser?.number ?? '',
+          'customer': loginUser.name ?? '',
+          'phone': loginUser.number ?? '',
           'item': itemName,
           'price': orderPrice,
           'address': orderAddress,

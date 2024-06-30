@@ -76,9 +76,14 @@ class _VendorAdminState extends State<VendorAdmin> {
   }
 }
 
-class AddProduct extends StatelessWidget {
+class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
 
+  @override
+  State<AddProduct> createState() => _AddProductState();
+}
+
+class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<VendorController>(builder: (ctrl) {
@@ -110,7 +115,7 @@ class AddProduct extends StatelessWidget {
                       const SizedBox(width: 60),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/vendor');
+                          Navigator.pushNamed(context, '/vendordashboard');
                         },
                         child: const Text(
                           'Back',

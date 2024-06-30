@@ -1,18 +1,20 @@
 // Generated file, do not modify.
 part of 'user.dart';
 
-// ignore_for_file:ादrt_strings_requireandelicates,invalid_annotation_target,unsupported_member_use,deprecated_member_use,deprecated_member_use_from_same_package,use_function_type_syntax_for_function_types,unnecessary_const,argument_type_not_assignable
-
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      number: (json['number'] as int?),
-      password: (json['password'] as String?));
+    id: json['id'] as String?,
+    name: json['name'] as String?,
+    number: json['number'] as int?,
+    password: json['password'] as String?,
+    email: json['email'] as String?, // Added field
+    accountNumber: json['accountNumber'] as String?, // Added field
+    businessName: json['businessName'] as String?, // Added field
+  );
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -20,4 +22,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'name': instance.name,
       'number': instance.number,
       'password': instance.password,
+      'email': instance.email, // Added field
+      'accountNumber': instance.accountNumber, // Added field
+      'businessName': instance.businessName, // Added field
     };
