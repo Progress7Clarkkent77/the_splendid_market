@@ -14,7 +14,7 @@ deploy-web:
 	flutter pub get
 
 	@echo "Building for web..."
-	flutter build web --base-href $(BASE_HREF) --release
+	flutter build web --web-renderer html --base-href $(BASE_HREF) --release
 
 	@echo "Deploying to git repository"
 	cd build/web && \
@@ -29,3 +29,24 @@ deploy-web:
 	@echo "🟢 Finished Deploy"
 
 .PHONY: deploy-web
+
+
+
+
+
+
+
+
+# Makefile for running Flutter web 
+
+# Update These Variables
+
+
+flutter-run:
+	@echo "running code..."
+	flutter run -d edge --web-renderer html
+
+	
+	@echo "🟢 Finished"
+
+.PHONY: flutter-run

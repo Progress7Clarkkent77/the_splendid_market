@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+//import 'package:get_storage/get_storage.dart';
 import 'package:the_splendid_market/constant/colors.dart';
-import 'package:the_splendid_market/controller/shop_controller.dart';
+//import 'package:the_splendid_market/controller/login_controller.dart';
+//import 'package:the_splendid_market/controller/shop_controller.dart';
+import 'package:the_splendid_market/controller/shop_controller1.dart';
+//import 'package:the_splendid_market/model/user/user.dart';
 import 'package:the_splendid_market/widgets/product_card.dart';
 
 class Shop extends StatelessWidget {
@@ -12,7 +15,12 @@ class Shop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ShopController>(builder: (ctrl) {
+    final String userId = Get.arguments['userId'] ?? '';
+
+    // Ensure that the ShopController is instantiated with userId
+    Get.put(ShopController1(userId));
+
+    return GetBuilder<ShopController1>(builder: (ctrl) {
       return RefreshIndicator(
         onRefresh: () async {
           ctrl.fetchProducts();
@@ -35,43 +43,23 @@ class Shop extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    IconButton(
+                    ElevatedButton(
                       onPressed: () {
-                        GetStorage box = GetStorage();
-                        box.erase();
-                        Get.toNamed('/home');
+                        Navigator.pushNamed(context, '/market');
                       },
-                      icon: const Icon(
-                        Icons.logout,
-                        color: mainColor,
+                      child: const Text(
+                        'Back',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: mainColor,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: 50,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: ctrl.productsCategories.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        ctrl.filterByCategory(
-                            ctrl.productsCategories[index].name ?? '');
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: Chip(
-                          label: Text(
-                            ctrl.productsCategories[index].name ?? '',
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              //
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -91,6 +79,7 @@ class Shop extends StatelessWidget {
                       onTap: () {
                         Get.toNamed('/description', arguments: {
                           'data': ctrl.productShowInUi[index],
+                          'userId': userId,
                         });
                       },
                     );
@@ -104,3 +93,27 @@ class Shop extends StatelessWidget {
     });
   }
 }
+
+//SizedBox(
+//   height: 50,
+//   child: ListView.builder(
+//     scrollDirection: Axis.horizontal,
+//     itemCount: ctrl.productsCategories.length,
+//     itemBuilder: (context, index) {
+//       return InkWell(
+//         onTap: () {
+//           ctrl.filterByCategory(
+//               ctrl.productsCategories[index].name ?? '');
+//         },
+//         child: Padding(
+//           padding: const EdgeInsets.all(6),
+//           child: Chip(
+//             label: Text(
+//               ctrl.productsCategories[index].name ?? '',
+//             ),
+//           ),
+//         ),
+//       );
+//     },
+//   ),
+// ),

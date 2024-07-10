@@ -26,3 +26,27 @@ class Login extends StatelessWidget {
     );
   }
 }
+
+class Register extends StatelessWidget {
+  const Register({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          if (constraints.maxWidth < 600) {
+            // Mobile layout
+            return const RegisterMobile();
+          } else if (constraints.maxWidth < 1200) {
+            // Tablet layout
+            return const RegisterTablet();
+          } else {
+            // Desktop layout
+            return const RegisterDesktop();
+          }
+        },
+      ),
+    );
+  }
+}

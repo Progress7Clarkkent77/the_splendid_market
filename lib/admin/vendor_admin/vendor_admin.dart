@@ -6,9 +6,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 //import 'package:image_picker/image_picker.dart';
 import 'package:the_splendid_market/constant/colors.dart';
+import 'package:the_splendid_market/controller/login_controller.dart';
 import 'package:the_splendid_market/controller/vendor_controller.dart';
 //import 'package:the_splendid_market/widgets/drop_down_btn.dart';
 import 'dart:html';
+
+import 'package:the_splendid_market/model/user/user.dart';
 
 class VendorAdmin extends StatefulWidget {
   const VendorAdmin({super.key});
@@ -17,13 +20,18 @@ class VendorAdmin extends StatefulWidget {
   State<VendorAdmin> createState() => _VendorAdminState();
 }
 
-Future<void> _refresh(VendorController ctrl) {
-  return ctrl.fetchLatestProducts();
-}
+// Future<void> _refresh(VendorController ctrl) {
+//   return ctrl.fetchLatestProducts();
+// }
 
 class _VendorAdminState extends State<VendorAdmin> {
   @override
   Widget build(BuildContext context) {
+    final User? currentUser = Get.find<LoginController>().getCurrentUser();
+
+    // Ensure that the VendorController is instantiated with currentUser
+    Get.put(VendorController(currentUser));
+
     return GetBuilder<VendorController>(
       builder: (ctrl) {
         return Scaffold(
@@ -41,8 +49,9 @@ class _VendorAdminState extends State<VendorAdmin> {
               ),
               Expanded(
                 child: RefreshIndicator(
-                  onRefresh: () =>
-                      _refresh(ctrl), // Pass the controller to _refresh
+                  onRefresh: () async {
+                    ctrl.fetchProducts();
+                  }, // Pass the controller to _refresh
                   child: ListView.builder(
                     itemCount: ctrl.products.length,
                     itemBuilder: (context, index) {
@@ -86,6 +95,11 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
+    final User? currentUser = Get.find<LoginController>().getCurrentUser();
+
+    // Ensure that the VendorController is instantiated with currentUser
+    Get.put(VendorController(currentUser));
+
     return GetBuilder<VendorController>(builder: (ctrl) {
       return Scaffold(
         body: SingleChildScrollView(
@@ -253,9 +267,6 @@ class _AddProductState extends State<AddProduct> {
     });
   }
 }
-
-
-
 
 
 

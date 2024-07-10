@@ -8,3 +8,12 @@ class LoginTablet extends StatelessWidget {
     return const Scaffold();
   }
 }
+
+class RegisterTablet extends StatelessWidget {
+  const RegisterTablet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold();
+  }
+}

@@ -1,143 +1,153 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:the_splendid_market/admin/vendor_admin/vendor_admin.dart';
+//import 'package:the_splendid_market/admin/vendor_admin/vendor_admin.dart';
 // import 'package:get_storage/get_storage.dart';
 import 'package:the_splendid_market/constant/colors.dart';
-import 'package:the_splendid_market/controller/vendor_dashboard_controller.dart';
-import 'package:the_splendid_market/widgets/vendor_product_card.dart';
+import 'package:the_splendid_market/controller/login_controller.dart';
+import 'package:the_splendid_market/controller/shop_controller.dart';
+import 'package:the_splendid_market/controller/vendor_controller.dart';
+//import 'package:the_splendid_market/controller/vendor_dashboard_controller.dart';
+import 'package:the_splendid_market/model/user/user.dart';
+import 'package:the_splendid_market/widgets/product_card.dart';
+//import 'package:the_splendid_market/widgets/vendor_product_card.dart';
+//import 'dart:html';
 // import 'package:the_splendid_market/widgets/vendor_product_card.dart';
 
 class VendorDashboard extends StatelessWidget {
-  const VendorDashboard({
-    super.key,
-  });
+  const VendorDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<VendorDashboardController>(builder: (ctrl) {
-      return RefreshIndicator(
-        onRefresh: () async {
-          ctrl.fetchProducts();
-        },
-        child: Scaffold(
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Circular Image Container
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color:
-                              mainColor, // Replace with your desired border color
-                          width: 2.0, // Adjust the border width as needed
-                        ),
-                        image: const DecorationImage(
-                          image: AssetImage(
-                              'assets/images/boy.png'), // Replace with your image asset path
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+    final User? currentUser = Get.find<LoginController>().getCurrentUser();
 
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    const Text(
-                      'Vendor Dashboard',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: mainColor, // Replace with your mainColor
+    // Ensure that the VendorController is instantiated with currentUser
+    Get.put(VendorController(currentUser));
+
+    return GetBuilder<VendorController>(
+      builder: (ctrl) {
+        return RefreshIndicator(
+          onRefresh: () async {
+            ctrl.fetchProducts();
+          },
+          child: Scaffold(
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Circular Image Container
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Get.toNamed('/addlogo');
+                      //   },
+                      //   child: Container(
+                      //     width: 40,
+                      //     height: 40,
+                      //     decoration: BoxDecoration(
+                      //       shape: BoxShape.circle,
+                      //       border: Border.all(
+                      //         color:
+                      //             mainColor, // Replace with your desired border color
+                      //         width: 2.0, // Adjust the border width as needed
+                      //       ),
+                      //       image: const DecorationImage(
+                      //         image: AssetImage(
+                      //             'assets/images/boy.png'), // Replace with your image asset path
+                      //         fit: BoxFit.cover,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      const SizedBox(
+                        width: 30,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        GetStorage box = GetStorage();
-                        box.erase();
-                        Get.toNamed('/home');
-                      },
-                      icon: const Icon(
-                        Icons.logout,
-                        color: mainColor, // Replace with your mainColor
+                      const Text(
+                        'Vendor Dashboard',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: mainColor, // Replace with your mainColor
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 10,
-                width: double.infinity,
-                color: mainColor,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8.0,
-                    mainAxisSpacing: 8.0,
-                    children: <Widget>[
-                      _buildGridItem(
-                        context,
-                        'Shop View',
-                        'assets/images/s11.png',
-                        const VendorShop(),
-                      ),
-                      _buildGridItem(
-                        context,
-                        'Add Products',
-                        'assets/images/s12.jpeg',
-                        const VendorAdmin(),
-                      ),
-                      _buildGridItem(
-                        context,
-                        'Orders',
-                        'assets/images/s15.jpeg',
-                        const Page3(),
-                      ),
-                      _buildGridItem(
-                        context,
-                        'Profile',
-                        'assets/images/s14.png',
-                        const Page4(),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          GetStorage box = GetStorage();
+                          box.erase();
+                          Get.toNamed('/home');
+                        },
+                        icon: const Icon(
+                          Icons.logout,
+                          color: mainColor, // Replace with your mainColor
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 10,
+                  width: double.infinity,
+                  color: mainColor,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      children: <Widget>[
+                        _buildGridItem(
+                          context,
+                          'Shop View',
+                          'assets/images/s11.png',
+                          '/vendorshop',
+                        ),
+                        _buildGridItem(
+                          context,
+                          'Add Products',
+                          'assets/images/s12.jpeg',
+                          '/vendor',
+                        ),
+                        _buildGridItem(
+                          context,
+                          'Orders',
+                          'assets/images/s15.jpeg',
+                          '/page8',
+                        ),
+                        _buildGridItem(
+                          context,
+                          'Profile',
+                          'assets/images/s14.png',
+                          '/profile',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   Widget _buildGridItem(
-      BuildContext context, String title, String imagePath, Widget page) {
+      BuildContext context, String title, String imagePath, String routeName) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
-        );
+        Get.toNamed(routeName);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -187,7 +197,12 @@ class VendorShop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<VendorDashboardController>(builder: (ctrl) {
+    final User? currentUser = Get.find<LoginController>().getCurrentUser();
+
+    // Ensure that the VendorController is instantiated with currentUser
+    Get.put(ShopController(currentUser));
+
+    return GetBuilder<ShopController>(builder: (ctrl) {
       return RefreshIndicator(
         onRefresh: () async {
           ctrl.fetchProducts();
@@ -239,7 +254,7 @@ class VendorShop extends StatelessWidget {
                   ),
                   itemCount: ctrl.productShowInUi.length,
                   itemBuilder: (context, index) {
-                    return VendorProductCard(
+                    return ProductCard(
                       name: ctrl.productShowInUi[index].name ?? 'No name',
                       imageUrl: ctrl.productShowInUi[index].image ?? '',
                       //Image.asset('assets/images/The Splendid.png', fit: BoxFit.cover),
@@ -262,8 +277,8 @@ class VendorShop extends StatelessWidget {
   }
 }
 
-class Page3 extends StatelessWidget {
-  const Page3({super.key});
+class Page8 extends StatelessWidget {
+  const Page8({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -277,40 +292,6 @@ class Page3 extends StatelessWidget {
     );
   }
 }
-
-class Page4 extends StatelessWidget {
-  const Page4({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              height: 80,
-              width: double.infinity,
-              color: Colors.transparent,
-              child: const Center(
-                child: Text(
-                  "My Profile",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: mainColor,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
 
 
 

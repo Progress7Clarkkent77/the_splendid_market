@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:the_splendid_market/controller/login_controller.dart';
+//import 'package:the_splendid_market/controller/login_controller.dart';
 import 'dart:html';
 import 'package:the_splendid_market/model/products/product.dart';
 import 'package:the_splendid_market/model/user/user.dart';
@@ -24,13 +24,16 @@ class VendorController extends GetxController {
 
   List<Product> products = [];
 
+  User? currentUser;
+
+  VendorController(this.currentUser);
+
   @override
   Future<void> onInit() async {
-    User? loginUser = Get.find<LoginController>().loginUser;
-    if (loginUser != null) {
+    if (currentUser != null) {
       productCollection = firestore
           .collection('users')
-          .doc(loginUser.id)
+          .doc(currentUser!.id)
           .collection('products');
       await fetchProducts();
     }
@@ -63,8 +66,7 @@ class VendorController extends GetxController {
       return;
     }
     try {
-      User? loginUser = Get.find<LoginController>().loginUser;
-      if (loginUser != null) {
+      if (currentUser != null) {
         DocumentReference doc = productCollection.doc();
         Product product = Product(
           id: doc.id,
@@ -93,13 +95,22 @@ class VendorController extends GetxController {
 
   void deleteProduct(String id) async {
     try {
-      await productCollection.doc(id).delete();
-      fetchProducts();
-      Get.snackbar('Success', 'Product deleted successfully',
-          colorText: Colors.green);
-      setValueDefault();
+      if (currentUser != null) {
+        await productCollection.doc(id).delete();
+        fetchProducts();
+        Get.snackbar(
+          'Success',
+          'Product deleted successfully',
+          colorText: Colors.green,
+        );
+        setValueDefault();
+      }
     } catch (e) {
-      Get.snackbar('Error', e.toString(), colorText: Colors.red);
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        colorText: Colors.red,
+      );
       print(e);
     } finally {
       update();
@@ -108,13 +119,15 @@ class VendorController extends GetxController {
 
   Future<void> fetchProducts() async {
     try {
-      QuerySnapshot productSnapshot = await productCollection.get();
-      final List<Product> retrievedProducts = productSnapshot.docs
-          .map((doc) => Product.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
-      products.clear();
-      products.assignAll(retrievedProducts);
-      update();
+      if (currentUser != null) {
+        QuerySnapshot productSnapshot = await productCollection.get();
+        final List<Product> retrievedProducts = productSnapshot.docs
+            .map((doc) => Product.fromJson(doc.data() as Map<String, dynamic>))
+            .toList();
+        products.clear();
+        products.assignAll(retrievedProducts);
+        update();
+      }
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
       print(e);

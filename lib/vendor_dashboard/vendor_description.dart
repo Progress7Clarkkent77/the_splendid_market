@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_splendid_market/constant/colors.dart';
-import 'package:the_splendid_market/controller/purchase_controller.dart';
+import 'package:the_splendid_market/controller/login_controller.dart';
+//import 'package:the_splendid_market/controller/purchase_controller.dart';
+//import 'package:the_splendid_market/controller/shop_controller.dart';
+import 'package:the_splendid_market/controller/vendor_controller.dart';
 import 'package:the_splendid_market/model/products/product.dart';
+import 'package:the_splendid_market/model/user/user.dart';
 
 class VendorDescription extends StatelessWidget {
   const VendorDescription({super.key});
@@ -10,7 +14,12 @@ class VendorDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Product product = Get.arguments['data'];
-    return GetBuilder<PurchaseController>(builder: (ctrl) {
+    final User? currentUser = Get.find<LoginController>().getCurrentUser();
+
+    // Ensure that the VendorController is instantiated with currentUser
+    Get.put(VendorController(currentUser));
+
+    return GetBuilder<VendorController>(builder: (ctrl) {
       return Scaffold(
         body: SingleChildScrollView(
           child: Padding(

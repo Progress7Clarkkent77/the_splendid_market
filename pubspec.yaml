@@ -51,6 +51,8 @@ dependencies:
   flutter_swiper_view: ^1.1.8
   font_awesome_flutter: ^10.7.0
   flutter_staggered_grid_view: ^0.7.0
+  animated_text_kit: ^4.2.2
+  google_fonts: ^6.2.1
   
 
 
@@ -110,7 +112,11 @@ flutter:
      - assets/images/s13.jpg
      - assets/images/s14.png
      - assets/images/s15.jpeg
+     - assets/images/s16.jpeg
+     - assets/images/s18.png
      - assets/images/boy.png
+     - assets/images/s19.jpg
+     - assets/images/shop.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
