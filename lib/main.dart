@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:the_splendid_market/admin/vendor_admin/add_logo.dart';
 
 import 'package:the_splendid_market/admin/vendor_admin/vendor_admin.dart';
 import 'package:the_splendid_market/board/board_mobile.dart';

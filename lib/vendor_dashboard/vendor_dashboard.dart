@@ -39,29 +39,7 @@ class VendorDashboard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Circular Image Container
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     Get.toNamed('/addlogo');
-                      //   },
-                      //   child: Container(
-                      //     width: 40,
-                      //     height: 40,
-                      //     decoration: BoxDecoration(
-                      //       shape: BoxShape.circle,
-                      //       border: Border.all(
-                      //         color:
-                      //             mainColor, // Replace with your desired border color
-                      //         width: 2.0, // Adjust the border width as needed
-                      //       ),
-                      //       image: const DecorationImage(
-                      //         image: AssetImage(
-                      //             'assets/images/boy.png'), // Replace with your image asset path
-                      //         fit: BoxFit.cover,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      
                       const SizedBox(
                         width: 30,
                       ),
